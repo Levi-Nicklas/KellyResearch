@@ -80,3 +80,13 @@ plt1 <- dat1 %>%
 
 animate(plt1)
 
+simulations[10,] %>% 
+  as.data.frame() %>% 
+  ggplot(aes(.)) + 
+  #geom_histogram(color = "white", fill = "purple", alpha = 0.75) +
+  geom_density(color = "#4e0f71", size = 1.1, fill = "#d6a0f3")+
+  ggtitle("End Wealth Result")+
+  xlab("Dollars") + 
+  coord_flip() +
+  theme_minimal()
+
