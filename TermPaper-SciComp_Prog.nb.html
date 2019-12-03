@@ -1786,120 +1786,43 @@ $(document).ready(function () {
 <p>We reproduce the result from the <code>CVX</code> paper, Example 4.6, by adapting the MatLab code to <code>R</code>.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBOdW1iZXIgb2Ygb3V0Y29tZXMvYXR0ZW1wdHNcbm4gPC0gIDEwMCBcbiMgS25vd24gUHJvYmFiaWxpdGllc1xucHMgPC0gcmVwKDEvbiAsIG4pXG4jIEsgcG9zc2libGUgdmFsdWVzIGZvciBSZXR1cm5zXG5yZXRzIDwtIHJ1bmlmKG4sIDAuNSwgMS41KVxuYGBgIn0= -->
-<pre class="r"><code># Number of outcomes/attempts
-n &lt;-  100 
-# Known Probabilities
-ps &lt;- rep(1/n , n)
-# K possible values for Returns
-rets &lt;- runif(n, 0.5, 1.5)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBJbnB1dCBkYXRhIGZyb20gQ1ZYUiBFeGFtcGxlLlxuUCA9IGMoMy41MDAwLCAxLjExMDAsIDEuMTEwMCwgMS4wNDAwLCAxLjAxMDAsXG4gICAgIDAuNTAwMCwgMC45NzAwLCAwLjk4MDAsIDEuMDUwMCwgMS4wMTAwLFxuICAgICAwLjUwMDAsIDAuOTkwMCwgMC45OTAwLCAwLjk5MDAsIDEuMDEwMCxcbiAgICAgMC41MDAwLCAxLjA1MDAsIDEuMDYwMCwgMC45OTAwLCAxLjAxMDAsXG4gICAgIDAuNTAwMCwgMS4xNjAwLCAwLjk5MDAsIDEuMDcwMCwgMS4wMTAwLFxuICAgICAwLjUwMDAsIDAuOTkwMCwgMC45OTAwLCAxLjA2MDAsIDEuMDEwMCxcbiAgICAgMC41MDAwLCAwLjkyMDAsIDEuMDgwMCwgMC45OTAwLCAxLjAxMDAsXG4gICAgIDAuNTAwMCwgMS4xMzAwLCAxLjEwMDAsIDAuOTkwMCwgMS4wMTAwLFxuICAgICAwLjUwMDAsIDAuOTMwMCwgMC45NTAwLCAxLjA0MDAsIDEuMDEwMCxcbiAgICAgMy41MDAwLCAwLjk5MDAsIDAuOTcwMCwgMC45ODAwLCAxLjAxMDApXG5cblAgPC0gbWF0cml4KFAsIG5jb2wgPSA1LCBieXJvdyA9IFRSVUUpXG5cblBfZGltIDwtIGRpbShQKVxuXG5wcyA8LSByZXAoMSwgUF9kaW1bMV0pIC8gUF9kaW1bMV1cblxudW5pZl9yZXMgPC0gcmVwKDEsIFBfZGltWzJdKSAvIFBfZGltWzJdXG5cbmIgPC0gVmFyaWFibGUoUF9kaW1bMl0pXG5gYGAifQ== -->
+<pre class="r"><code># Input data from CVXR Example.
+P = c(3.5000, 1.1100, 1.1100, 1.0400, 1.0100,
+     0.5000, 0.9700, 0.9800, 1.0500, 1.0100,
+     0.5000, 0.9900, 0.9900, 0.9900, 1.0100,
+     0.5000, 1.0500, 1.0600, 0.9900, 1.0100,
+     0.5000, 1.1600, 0.9900, 1.0700, 1.0100,
+     0.5000, 0.9900, 0.9900, 1.0600, 1.0100,
+     0.5000, 0.9200, 1.0800, 0.9900, 1.0100,
+     0.5000, 1.1300, 1.1000, 0.9900, 1.0100,
+     0.5000, 0.9300, 0.9500, 1.0400, 1.0100,
+     3.5000, 0.9900, 0.9700, 0.9800, 1.0100)
+
+P &lt;- matrix(P, ncol = 5, byrow = TRUE)
+
+P_dim &lt;- dim(P)
+
+ps &lt;- rep(1, P_dim[1]) / P_dim[1]
+
+unif_res &lt;- rep(1, P_dim[2]) / P_dim[2]
+
+b &lt;- Variable(P_dim[2])</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc29sdmUocHJvYilcblxuYGBgIn0= -->
-<pre class="r"><code>solve(prob)
-</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY29uc3RyIDwtIGxpc3QoYiA+PSAwLCBzdW0oYikgPT0gMSlcbmBgYCJ9 -->
+<pre class="r"><code>constr &lt;- list(b &gt;= 0, sum(b) == 1)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiJHN0YXR1c1xuWzFdIFwib3B0aW1hbFwiXG5cbiR2YWx1ZVxuWzFdIDAuMDIzMDc4MzJcblxuJGA0N2BcbiAgICAgICAgICAgICBbLDFdXG5bMSxdIDUuNzk3NDI4ZS0wMlxuWzIsXSAzLjk5OTgyOWUtMDFcblszLF0gMi45MjI3MjNlLTAxXG5bNCxdIDIuNDk3NzA1ZS0wMVxuWzUsXSAyLjY4OTIzMGUtMDlcblxuJGA1MWBcblsxXSAxXG5cbiRgNDlgXG4gICAgICAgICAgICAgWywxXVxuWzEsXSA0LjU4NDMyOWUtMTBcblsyLF0gNi42NDMwMjllLTExXG5bMyxdIDkuMDU5MjMwZS0xMVxuWzQsXSAxLjA2MDc3MGUtMTBcbls1LF0gOS44ODE0MTllLTAzXG5cbiRzb2x2ZXJcblsxXSBcIkVDT1NcIlxuXG4kc29sdmVfdGltZVxuWzFdIDAuMDAxNDY5MDlcblxuJHNldHVwX3RpbWVcblsxXSAwLjAwMDU2MTkzNFxuXG4kbnVtX2l0ZXJzXG5bMV0gMTlcblxuJGdldFZhbHVlXG5mdW5jdGlvbiAob2JqZXQpIFxue1xuICAgIGlmIChpcyhvYmpldCwgXCJWYXJpYWJsZVwiKSB8fCBpcyhvYmpldCwgXCJDb25zdHJhaW50XCIpKSB7XG4gICAgICAgIHJldHVybihyZXN1bHRbW2FzLmNoYXJhY3RlcihpZChvYmpldCkpXV0pXG4gICAgfVxuICAgIGlmIChpc196ZXJvKG9iamV0KSkge1xuICAgICAgICBzaXplIDwtIHNpemUob2JqZXQpXG4gICAgICAgIHZhbFJlc3VsdCA8LSBtYXRyaXgoMCwgbnJvdyA9IHNpemVbMV0sIG5jb2wgPSBzaXplWzJdKVxuICAgIH1cbiAgICBlbHNlIHtcbiAgICAgICAgYXJnX3ZhbHVlcyA8LSBsaXN0KClcbiAgICAgICAgaWR4IDwtIDFcbiAgICAgICAgZm9yIChhcmcgaW4gb2JqZXRAYXJncykge1xuICAgICAgICAgICAgYXJnX3ZhbCA8LSBpZiAoaXNfY29uc3RhbnQoYXJnKSkge1xuICAgICAgICAgICAgICAgIHZhbHVlKGFyZylcbiAgICAgICAgICAgIH1cbiAgICAgICAgICAgIGVsc2Uge1xuICAgICAgICAgICAgICAgIGdldFZhbHVlKGFyZylcbiAgICAgICAgICAgIH1cbiAgICAgICAgICAgIGlmIChpcy5udWxsKGFyZ192YWwpIHx8IChhbnkoaXMubmEoYXJnX3ZhbCkpICYmICFpc19jb25zdGFudChvYmpldCkpKSBcbiAgICAgICAgICAgICAgICByZXR1cm4oTkEpXG4gICAgICAgICAgICBlbHNlIHtcbiAgICAgICAgICAgICAgICBhcmdfdmFsdWVzW1tpZHhdXSA8LSBhcmdfdmFsXG4gICAgICAgICAgICAgICAgaWR4IDwtIGlkeCArIDFcbiAgICAgICAgICAgIH1cbiAgICAgICAgfVxuICAgICAgICB2YWxSZXN1bHQgPC0gdG9fbnVtZXJpYyhvYmpldCwgYXJnX3ZhbHVlcylcbiAgICB9XG4gICAgaWYgKGFsbChpbnRmX3NpemUodmFsUmVzdWx0KSA9PSBjKDEsIDEpKSkgXG4gICAgICAgIGludGZfc2NhbGFyX3ZhbHVlKHZhbFJlc3VsdClcbiAgICBlbHNlIHZhbFJlc3VsdFxufVxuPGJ5dGVjb2RlOiAweDdmZTQ5NjZkZGI4MD5cbjxlbnZpcm9ubWVudDogMHg3ZmU0OTMxMzVlMDA+XG5cbiRnZXREdWFsVmFsdWVcbmZ1bmN0aW9uIChvYmpldCkgXG57XG4gICAgaWYgKCFpcyhvYmpldCwgXCJDb25zdHJhaW50XCIpKSB7XG4gICAgICAgIHN0b3AoXCJnZXREdWFsVmFsdWU6IGFyZ3VtZW50IHNob3VsZCBiZSBhIENvbnN0cmFpbnQhXCIpXG4gICAgfVxuICAgIGdldFZhbHVlKG9iamV0KVxufVxuPGJ5dGVjb2RlOiAweDdmZTQ5NjZlNGZlOD5cbjxlbnZpcm9ubWVudDogMHg3ZmU0OTMxMzVlMDA+XG4ifQ== -->
-<pre><code>$status
-[1] &quot;optimal&quot;
-
-$value
-[1] 0.02307832
-
-$`47`
-             [,1]
-[1,] 5.797428e-02
-[2,] 3.999829e-01
-[3,] 2.922723e-01
-[4,] 2.497705e-01
-[5,] 2.689230e-09
-
-$`51`
-[1] 1
-
-$`49`
-             [,1]
-[1,] 4.584329e-10
-[2,] 6.643029e-11
-[3,] 9.059230e-11
-[4,] 1.060770e-10
-[5,] 9.881419e-03
-
-$solver
-[1] &quot;ECOS&quot;
-
-$solve_time
-[1] 0.00146909
-
-$setup_time
-[1] 0.000561934
-
-$num_iters
-[1] 19
-
-$getValue
-function (objet) 
-{
-    if (is(objet, &quot;Variable&quot;) || is(objet, &quot;Constraint&quot;)) {
-        return(result[[as.character(id(objet))]])
-    }
-    if (is_zero(objet)) {
-        size &lt;- size(objet)
-        valResult &lt;- matrix(0, nrow = size[1], ncol = size[2])
-    }
-    else {
-        arg_values &lt;- list()
-        idx &lt;- 1
-        for (arg in objet@args) {
-            arg_val &lt;- if (is_constant(arg)) {
-                value(arg)
-            }
-            else {
-                getValue(arg)
-            }
-            if (is.null(arg_val) || (any(is.na(arg_val)) &amp;&amp; !is_constant(objet))) 
-                return(NA)
-            else {
-                arg_values[[idx]] &lt;- arg_val
-                idx &lt;- idx + 1
-            }
-        }
-        valResult &lt;- to_numeric(objet, arg_values)
-    }
-    if (all(intf_size(valResult) == c(1, 1))) 
-        intf_scalar_value(valResult)
-    else valResult
-}
-&lt;bytecode: 0x7fe4966ddb80&gt;
-&lt;environment: 0x7fe493135e00&gt;
-
-$getDualValue
-function (objet) 
-{
-    if (!is(objet, &quot;Constraint&quot;)) {
-        stop(&quot;getDualValue: argument should be a Constraint!&quot;)
-    }
-    getValue(objet)
-}
-&lt;bytecode: 0x7fe4966e4fe8&gt;
-&lt;environment: 0x7fe493135e00&gt;</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucHJvYiA8LSBDVlhSOjpQcm9ibGVtKFxuICBDVlhSOjpNYXhpbWl6ZShvYmpfZnRuKSxcbiAgY29uc3RyKVxuXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucHJvYiA8LSBDVlhSOjpQcm9ibGVtKFxuICBDVlhSOjpNYXhpbWl6ZShzdW0ocHMgKiBsb2coUCAlKiUgYikpKSxcbiAgY29uc3RyKVxuXG5yZXN1bHQgPC0gc29sdmUocHJvYilcbmBgYCJ9 -->
 <pre class="r"><code>prob &lt;- CVXR::Problem(
-  CVXR::Maximize(obj_ftn),
+  CVXR::Maximize(sum(ps * log(P %*% b))),
   constr)
-</code></pre>
+
+result &lt;- solve(prob)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3IgaW4gLmxvY2FsKC5PYmplY3QsIC4uLikgOiBUaGUgb2JqZWN0aXZlIG11c3QgcmVzb2x2ZSB0byBhIHNjYWxhclxuIn0= -->
-<pre><code>Error in .local(.Object, ...) : The objective must resolve to a scalar</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -1910,7 +1833,7 @@ function (objet)
 <!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiS2VsbHkgQ3JpdGVyaW9uIgphdXRob3I6ICJYaW4gV2FuZyAmIExldmkgQy4gTmlja2xhcyIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKYGBge3IgU2V0dXAsIG1lc3NhZ2UgPSBGQUxTRX0KbGlicmFyeShDVlhSKQpgYGAKCiMgSW50cm9kdWN0aW9uCgpUaGUgS2VsbHkgY3JpdGVyaW9uLCBhbHNvIGtub3duIGFzIEtlbGx5IGdhbWJsaW5nLCBpcyBhIGZvcm11bGEgdGhhdCBhaW1zIHRvIHByb3ZpZGUgdGhlIG9wdGltYWwgc2l6ZSBiZXQgdG8gbWFrZS4gV2hhdCBpcyBwYXJ0aWN1bGFybHkgbmljZSBhYm91dCB0aGlzIG1ldGhvZCwgaXMgdGhhdCBpdCBpcyAqaW50ZXJ0ZW1wb3JhbCosIG1lYW5pbmcgaXQgaXMgaW5kZXBlbmRlbnQgb2YgdGltZS4gVGhpcyBtZWFucyB5b3Ugb25seSBoYXZlIHRvIGNhbGN1bGF0ZSBpdCBvbmNlLCBhbmQgdGhlbiBzdGljayB0byB0aGUgcGxhbiBnaXZlbiB0aGF0IHRoZSBjaXJjdW1zdGFuY2VzIG9mIHRoZSBnYW1lIGhhdmUgbm90IGNoYW5nZWQuIFRoaXMgcHJvYmxlbSBjYW4gYmUgdmlld2VkIGFzIGEgY29udmV4IG9wdGltaXphdGlvbiBwcm9ibGVtIHdoZXJlIHRoZSBnb2FsIGlzIHRvIG1heGltaXplIHRoZSByYXRlIGF0IHdoaWNoIHlvdXIgd2VhbHRoIGdyb3dzLgoKIyBBYm91dCBLZWxseSBHYW1ibGluZwoKS2VsbHkgR2FtYmxpbmcgaGFzIGZvdW5kIGdyZWF0IHN1Y2Nlc3NlcyBpbiBwb3J0Zm9saW8gbWFuYWdlbWVudC4gSW4gcGFydGljdWxhciwgaXQgaXMgcXVpdGUgcG9wdWxhciBpbiBhcHBsaWNhdGlvbnMgdG8gdGhlIHN0b2NrIG1hcmtldCwgYXMgdGhlIHN0b2NrIG1hcmtldCBjYW4gYmUgdmlld2VkIGFzIGEgZ2FtYmxpbmcgZ2FtZSAkXntbMl19JC4gVGhpcyBtZXRob2Qgd2FzIGRldmVsb3BlZCBieSBKLkwuIEtlbGx5IEpyLiBpbiAxOTU2ICAkXntbMV19JC4gKEFERCBNT1JFIEhFUkUuKQoKIyBDb252ZXggT3B0aW1pemF0aW9uIG9mIEtlbGx5IEdhbWJsaW5nCgpGaXJzdCB3ZSBkZW1vbnN0cmF0ZSBob3cgdGhlIEtlbGx5IGdhbWJsaW5nIHByb2JsZW0gY2FuIGJlIHZpZXdlZCBhcyBhIGNvbnZleCBvcHRpbWl6YXRpb24gcHJvYmxlbS4gCgpJbiB0aGUgY2FzZSBmb3IgS2VsbHkgZ2FtYmxpbmcsIG91ciBmdW5jdGlvbiB3ZSBhaW0gdG8gbWF4aW1pemUgaXMgdGhlIGF2ZXJhZ2UgZ3Jvd3RoIHJhdGUgb2Ygb3VyIHdlYWx0aC4gCgpXZSByZXByb2R1Y2UgdGhlIHJlc3VsdCBmcm9tIHRoZSBgQ1ZYYCBwYXBlciwgRXhhbXBsZSA0LjYsIGJ5IGFkYXB0aW5nIHRoZSBNYXRMYWIgY29kZSB0byBgUmAuCmBgYHtyIERlZmluZSBWYXJpYWJsZXN9CiMgTnVtYmVyIG9mIG91dGNvbWVzL2F0dGVtcHRzCm4gPC0gIDEwMCAKIyBLbm93biBQcm9iYWJpbGl0aWVzCnBzIDwtIHJlcCgxL24gLCBuKQojIEsgcG9zc2libGUgdmFsdWVzIGZvciBSZXR1cm5zCnJldHMgPC0gcnVuaWYobiwgMC41LCAxLjUpCmBgYAoKYGBge3J9CgpuIDwtIDEwMAoKIyBJbnB1dCBkYXRhIGZyb20gQ1ZYUiBFeGFtcGxlLgpQID0gYygzLjUwMDAsIDEuMTEwMCwgMS4xMTAwLCAxLjA0MDAsIDEuMDEwMCwKICAgICAwLjUwMDAsIDAuOTcwMCwgMC45ODAwLCAxLjA1MDAsIDEuMDEwMCwKICAgICAwLjUwMDAsIDAuOTkwMCwgMC45OTAwLCAwLjk5MDAsIDEuMDEwMCwKICAgICAwLjUwMDAsIDEuMDUwMCwgMS4wNjAwLCAwLjk5MDAsIDEuMDEwMCwKICAgICAwLjUwMDAsIDEuMTYwMCwgMC45OTAwLCAxLjA3MDAsIDEuMDEwMCwKICAgICAwLjUwMDAsIDAuOTkwMCwgMC45OTAwLCAxLjA2MDAsIDEuMDEwMCwKICAgICAwLjUwMDAsIDAuOTIwMCwgMS4wODAwLCAwLjk5MDAsIDEuMDEwMCwKICAgICAwLjUwMDAsIDEuMTMwMCwgMS4xMDAwLCAwLjk5MDAsIDEuMDEwMCwKICAgICAwLjUwMDAsIDAuOTMwMCwgMC45NTAwLCAxLjA0MDAsIDEuMDEwMCwKICAgICAzLjUwMDAsIDAuOTkwMCwgMC45NzAwLCAwLjk4MDAsIDEuMDEwMCkKUCA8LSBtYXRyaXgoUCwgbmNvbCA9IDUsIGJ5cm93ID0gVFJVRSkKClBfZGltIDwtIGRpbShQKQoKcHMgPC0gcmVwKDEsIFBfZGltWzFdKSAvIFBfZGltWzFdCnVuaWZfcmVzIDwtIHJlcCgxLCBQX2RpbVsyXSkgLyBQX2RpbVsyXQoKYiA8LSBWYXJpYWJsZShQX2RpbVsyXSkKY29uc3RyIDwtIGxpc3QoYiA+PSAwLCBzdW0oYikgPT0gMSkKcHJvYiA8LSBDVlhSOjpQcm9ibGVtKAogIENWWFI6Ok1heGltaXplKHN1bShwcyAqIGxvZyhQICUqJSBiKSkpLAogIGNvbnN0cikKCnNvbHZlKHByb2IpCgpgYGAKCgpgYGB7ciBEZWZpbmUgT2JqZWN0aXZlIEZ1bmN0aW9ufQpiIDwtIENWWFI6OlZhcmlhYmxlKG4pCm9ial9mdG4gPC0gdChwcykgKiBsb2cocmV0cyAlKiUgYikKY29uc3RyIDwtIGxpc3QoYiA+PSAwLCBzdW0oYikgPT0gMSkKCnByb2IgPC0gQ1ZYUjo6UHJvYmxlbSgKICBDVlhSOjpNYXhpbWl6ZShvYmpfZnRuKSwKICBjb25zdHIpCgpgYGAKCgoKIyBSZWZlcmVuY2VzCiRee1sxXX0kIDogCgokXntbMl19JCA6IGh0dHA6Ly93d3cuZGl2YS1wb3J0YWwub3JnL3NtYXNoL2dldC9kaXZhMjo4MTI2OTcvRlVMTFRFWFQwMS5wZGYgCgoKCgo=</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiS2VsbHkgQ3JpdGVyaW9uIgphdXRob3I6ICJYaW4gV2FuZyAmIExldmkgQy4gTmlja2xhcyIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKYGBge3IgU2V0dXAsIG1lc3NhZ2UgPSBGQUxTRX0KbGlicmFyeShDVlhSKQpgYGAKCiMgSW50cm9kdWN0aW9uCgpUaGUgS2VsbHkgY3JpdGVyaW9uLCBhbHNvIGtub3duIGFzIEtlbGx5IGdhbWJsaW5nLCBpcyBhIGZvcm11bGEgdGhhdCBhaW1zIHRvIHByb3ZpZGUgdGhlIG9wdGltYWwgc2l6ZSBiZXQgdG8gbWFrZS4gV2hhdCBpcyBwYXJ0aWN1bGFybHkgbmljZSBhYm91dCB0aGlzIG1ldGhvZCwgaXMgdGhhdCBpdCBpcyAqaW50ZXJ0ZW1wb3JhbCosIG1lYW5pbmcgaXQgaXMgaW5kZXBlbmRlbnQgb2YgdGltZS4gVGhpcyBtZWFucyB5b3Ugb25seSBoYXZlIHRvIGNhbGN1bGF0ZSBpdCBvbmNlLCBhbmQgdGhlbiBzdGljayB0byB0aGUgcGxhbiBnaXZlbiB0aGF0IHRoZSBjaXJjdW1zdGFuY2VzIG9mIHRoZSBnYW1lIGhhdmUgbm90IGNoYW5nZWQuIFRoaXMgcHJvYmxlbSBjYW4gYmUgdmlld2VkIGFzIGEgY29udmV4IG9wdGltaXphdGlvbiBwcm9ibGVtIHdoZXJlIHRoZSBnb2FsIGlzIHRvIG1heGltaXplIHRoZSByYXRlIGF0IHdoaWNoIHlvdXIgd2VhbHRoIGdyb3dzLgoKIyBBYm91dCBLZWxseSBHYW1ibGluZwoKS2VsbHkgR2FtYmxpbmcgaGFzIGZvdW5kIGdyZWF0IHN1Y2Nlc3NlcyBpbiBwb3J0Zm9saW8gbWFuYWdlbWVudC4gSW4gcGFydGljdWxhciwgaXQgaXMgcXVpdGUgcG9wdWxhciBpbiBhcHBsaWNhdGlvbnMgdG8gdGhlIHN0b2NrIG1hcmtldCwgYXMgdGhlIHN0b2NrIG1hcmtldCBjYW4gYmUgdmlld2VkIGFzIGEgZ2FtYmxpbmcgZ2FtZSAkXntbMl19JC4gVGhpcyBtZXRob2Qgd2FzIGRldmVsb3BlZCBieSBKLkwuIEtlbGx5IEpyLiBpbiAxOTU2ICAkXntbMV19JC4gKEFERCBNT1JFIEhFUkUuKQoKIyBDb252ZXggT3B0aW1pemF0aW9uIG9mIEtlbGx5IEdhbWJsaW5nCgpGaXJzdCB3ZSBkZW1vbnN0cmF0ZSBob3cgdGhlIEtlbGx5IGdhbWJsaW5nIHByb2JsZW0gY2FuIGJlIHZpZXdlZCBhcyBhIGNvbnZleCBvcHRpbWl6YXRpb24gcHJvYmxlbS4gCgpJbiB0aGUgY2FzZSBmb3IgS2VsbHkgZ2FtYmxpbmcsIG91ciBmdW5jdGlvbiB3ZSBhaW0gdG8gbWF4aW1pemUgaXMgdGhlIGF2ZXJhZ2UgZ3Jvd3RoIHJhdGUgb2Ygb3VyIHdlYWx0aC4gCgpXZSByZXByb2R1Y2UgdGhlIHJlc3VsdCBmcm9tIHRoZSBgQ1ZYYCBwYXBlciwgRXhhbXBsZSA0LjYsIGJ5IGFkYXB0aW5nIHRoZSBNYXRMYWIgY29kZSB0byBgUmAuCgpgYGB7ciBEZWZpbmUgVmFyaWFibGVzfQojIElucHV0IGRhdGEgZnJvbSBDVlhSIEV4YW1wbGUuClAgPSBjKDMuNTAwMCwgMS4xMTAwLCAxLjExMDAsIDEuMDQwMCwgMS4wMTAwLAogICAgIDAuNTAwMCwgMC45NzAwLCAwLjk4MDAsIDEuMDUwMCwgMS4wMTAwLAogICAgIDAuNTAwMCwgMC45OTAwLCAwLjk5MDAsIDAuOTkwMCwgMS4wMTAwLAogICAgIDAuNTAwMCwgMS4wNTAwLCAxLjA2MDAsIDAuOTkwMCwgMS4wMTAwLAogICAgIDAuNTAwMCwgMS4xNjAwLCAwLjk5MDAsIDEuMDcwMCwgMS4wMTAwLAogICAgIDAuNTAwMCwgMC45OTAwLCAwLjk5MDAsIDEuMDYwMCwgMS4wMTAwLAogICAgIDAuNTAwMCwgMC45MjAwLCAxLjA4MDAsIDAuOTkwMCwgMS4wMTAwLAogICAgIDAuNTAwMCwgMS4xMzAwLCAxLjEwMDAsIDAuOTkwMCwgMS4wMTAwLAogICAgIDAuNTAwMCwgMC45MzAwLCAwLjk1MDAsIDEuMDQwMCwgMS4wMTAwLAogICAgIDMuNTAwMCwgMC45OTAwLCAwLjk3MDAsIDAuOTgwMCwgMS4wMTAwKQoKUCA8LSBtYXRyaXgoUCwgbmNvbCA9IDUsIGJ5cm93ID0gVFJVRSkKClBfZGltIDwtIGRpbShQKQoKcHMgPC0gcmVwKDEsIFBfZGltWzFdKSAvIFBfZGltWzFdCgp1bmlmX3JlcyA8LSByZXAoMSwgUF9kaW1bMl0pIC8gUF9kaW1bMl0KCmIgPC0gVmFyaWFibGUoUF9kaW1bMl0pCmBgYAoKYGBge3IgU29sdmUgQ29udmV4IFByb2JsZW19CmNvbnN0ciA8LSBsaXN0KGIgPj0gMCwgc3VtKGIpID09IDEpCgpwcm9iIDwtIENWWFI6OlByb2JsZW0oCiAgQ1ZYUjo6TWF4aW1pemUoc3VtKHBzICogbG9nKFAgJSolIGIpKSksCiAgY29uc3RyKQoKcmVzdWx0IDwtIHNvbHZlKHByb2IpCmBgYAoKCgoKCgojIFJlZmVyZW5jZXMKJF57WzFdfSQgOiAKCiRee1syXX0kIDogaHR0cDovL3d3dy5kaXZhLXBvcnRhbC5vcmcvc21hc2gvZ2V0L2RpdmEyOjgxMjY5Ny9GVUxMVEVYVDAxLnBkZiAKCgoKCg==</div>
 
 
 
