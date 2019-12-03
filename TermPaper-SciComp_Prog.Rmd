@@ -6,6 +6,8 @@ output: html_notebook
 
 ```{r Setup, message = FALSE}
 library(CVXR)
+library(tidyverse)
+library(reshape2)
 ```
 
 # Introduction
@@ -40,6 +42,7 @@ P = c(3.5000, 1.1100, 1.1100, 1.0400, 1.0100,
      0.5000, 1.1300, 1.1000, 0.9900, 1.0100,
      0.5000, 0.9300, 0.9500, 1.0400, 1.0100,
      3.5000, 0.9900, 0.9700, 0.9800, 1.0100)
+
 # Reformat to Matrix
 P <- matrix(P, ncol = 5, byrow = TRUE)
 
@@ -69,10 +72,35 @@ result <- solve(prob)
 ## Simulations
 
 ```{r Simulate}
-bets <- result$getValue(b)
-idx <- sample.int(10, size = 10, prob =  ps, replace = TRUE)
-winnings <- P[idx,] %*% bets
-wealth <- w0 * cumprod(winnings)
+# 1 Simulation
+# bets <- result$getValue(b)
+# idx <- sample.int(10, size = 10, prob =  ps, replace = TRUE)
+# winnings <- P[idx,] %*% bets
+# wealth <- w0 * cumprod(winnings)
+
+# Multiple Simulations
+n_sim <- 50
+simulations <- matrix(rep(0,10*n_sim), nrow = 10)
+
+for(i in 1:n_sim){
+  bets <- result$getValue(b)
+  idx <- sample.int(10, size = 10, prob =  ps, replace = TRUE)
+  winnings <- P[idx,] %*% bets
+  wealth <- w0 * cumprod(winnings)
+  
+  simulations[,i] <- wealth
+}
+
+simulations %>% 
+  melt() %>% 
+  group_by(Var2) %>% 
+  ggplot(aes(Var1, value, group = Var2)) +
+  geom_line(color = "purple" , alpha = 0.5) +
+  geom_hline(yintercept = 100, color = "black", size = 1.15, linetype = "dashed") +
+  labs(title = "50 Simulations of 10 Rounds of Game",
+       x = "Round",
+       y = "Wealth ($)") +
+  theme_minimal()
 
 
 ```
