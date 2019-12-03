@@ -21,18 +21,53 @@ Kelly Gambling has found great successes in portfolio management. In particular,
 First we demonstrate how the Kelly gambling problem can be viewed as a convex optimization problem. 
 
 In the case for Kelly gambling, our function we aim to maximize is the average growth rate of our wealth. 
+
+We reproduce the result from the `CVX` paper, Example 4.6, by adapting the MatLab code to `R`.
 ```{r Define Variables}
 # Number of outcomes/attempts
 n <-  100 
 # Known Probabilities
 ps <- rep(1/n , n)
 # K possible values for Returns
-rets <- rep(1/n, n)
+rets <- runif(n, 0.5, 1.5)
 ```
+
+```{r}
+
+n <- 100
+
+# Input data from CVXR Example.
+P = c(3.5000, 1.1100, 1.1100, 1.0400, 1.0100,
+     0.5000, 0.9700, 0.9800, 1.0500, 1.0100,
+     0.5000, 0.9900, 0.9900, 0.9900, 1.0100,
+     0.5000, 1.0500, 1.0600, 0.9900, 1.0100,
+     0.5000, 1.1600, 0.9900, 1.0700, 1.0100,
+     0.5000, 0.9900, 0.9900, 1.0600, 1.0100,
+     0.5000, 0.9200, 1.0800, 0.9900, 1.0100,
+     0.5000, 1.1300, 1.1000, 0.9900, 1.0100,
+     0.5000, 0.9300, 0.9500, 1.0400, 1.0100,
+     3.5000, 0.9900, 0.9700, 0.9800, 1.0100)
+P <- matrix(P, ncol = 5, byrow = TRUE)
+
+P_dim <- dim(P)
+
+ps <- rep(1, P_dim[1]) / P_dim[1]
+unif_res <- rep(1, P_dim[2]) / P_dim[2]
+
+b <- Variable(P_dim[2])
+constr <- list(b >= 0, sum(b) == 1)
+prob <- CVXR::Problem(
+  CVXR::Maximize(sum(ps * log(P %*% b))),
+  constr)
+
+solve(prob)
+
+```
+
 
 ```{r Define Objective Function}
 b <- CVXR::Variable(n)
-obj_ftn <- t(ps) %*% log(rets %*% b)
+obj_ftn <- t(ps) * log(rets %*% b)
 constr <- list(b >= 0, sum(b) == 1)
 
 prob <- CVXR::Problem(
