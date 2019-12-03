@@ -14,19 +14,32 @@ The Kelly criterion, also known as Kelly gambling, is a formula that aims to pro
 
 # About Kelly Gambling
 
-Kelly Gambling has found great successes in portfolio management. In particular, it is quite popular in applications to the stock market, as the stock market can be viewed as a gambling game $^{[2]}$.
-
+Kelly Gambling has found great successes in portfolio management. In particular, it is quite popular in applications to the stock market, as the stock market can be viewed as a gambling game $^{[2]}$. This method was developed by J.L. Kelly Jr. in 1956  $^{[1]}$. (ADD MORE HERE.)
 
 # Convex Optimization of Kelly Gambling
 
 First we demonstrate how the Kelly gambling problem can be viewed as a convex optimization problem. 
 
 In the case for Kelly gambling, our function we aim to maximize is the average growth rate of our wealth. 
-```{r}
-
-
+```{r Define Variables}
+# Number of outcomes/attempts
+n <-  100 
+# Known Probabilities
+ps <- rep(1/n , n)
+# K possible values for Returns
+rets <- rep(1/n, n)
 ```
 
+```{r Define Objective Function}
+b <- CVXR::Variable(n)
+obj_ftn <- t(ps) %*% log(rets %*% b)
+constr <- list(b >= 0, sum(b) == 1)
+
+prob <- CVXR::Problem(
+  CVXR::Maximize(obj_ftn),
+  constr)
+
+```
 
 
 

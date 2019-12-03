@@ -1777,7 +1777,7 @@ $(document).ready(function () {
 </div>
 <div id="about-kelly-gambling" class="section level1">
 <h1>About Kelly Gambling</h1>
-<p>Kelly Gambling has found great successes in portfolio management. In particular, it is quite popular in applications to the stock market, as the stock market can be viewed as a gambling game <span class="math inline">\(^{[2]}\)</span>.</p>
+<p>Kelly Gambling has found great successes in portfolio management. In particular, it is quite popular in applications to the stock market, as the stock market can be viewed as a gambling game <span class="math inline">\(^{[2]}\)</span>. This method was developed by J.L. Kelly Jr. in 1956 <span class="math inline">\(^{[1]}\)</span>. (ADD MORE HERE.)</p>
 </div>
 <div id="convex-optimization-of-kelly-gambling" class="section level1">
 <h1>Convex Optimization of Kelly Gambling</h1>
@@ -1785,6 +1785,17 @@ $(document).ready(function () {
 <p>In the case for Kelly gambling, our function we aim to maximize is the average growth rate of our wealth.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucHJvYiA8LSBDVlhSOjpQcm9ibGVtKENWWFI6Ok1heGltaXplKG9ial9mdG4pLCBjb25zdHIpXG5cbmBgYCJ9 -->
+<pre class="r"><code>prob &lt;- CVXR::Problem(CVXR::Maximize(obj_ftn), constr)
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3IgaW4gLmxvY2FsKC5PYmplY3QsIC4uLikgOiBUaGUgb2JqZWN0aXZlIG11c3QgcmVzb2x2ZSB0byBhIHNjYWxhclxuIn0= -->
+<pre><code>Error in .local(.Object, ...) : The objective must resolve to a scalar</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -1795,7 +1806,7 @@ $(document).ready(function () {
 <!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiS2VsbHkgQ3JpdGVyaW9uIgphdXRob3I6ICJYaW4gV2FuZyAmIExldmkgQy4gTmlja2xhcyIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKYGBge3IgU2V0dXAsIG1lc3NhZ2UgPSBGQUxTRX0KbGlicmFyeShDVlhSKQpgYGAKCiMgSW50cm9kdWN0aW9uCgpUaGUgS2VsbHkgY3JpdGVyaW9uLCBhbHNvIGtub3duIGFzIEtlbGx5IGdhbWJsaW5nLCBpcyBhIGZvcm11bGEgdGhhdCBhaW1zIHRvIHByb3ZpZGUgdGhlIG9wdGltYWwgc2l6ZSBiZXQgdG8gbWFrZS4gV2hhdCBpcyBwYXJ0aWN1bGFybHkgbmljZSBhYm91dCB0aGlzIG1ldGhvZCwgaXMgdGhhdCBpdCBpcyAqaW50ZXJ0ZW1wb3JhbCosIG1lYW5pbmcgaXQgaXMgaW5kZXBlbmRlbnQgb2YgdGltZS4gVGhpcyBtZWFucyB5b3Ugb25seSBoYXZlIHRvIGNhbGN1bGF0ZSBpdCBvbmNlLCBhbmQgdGhlbiBzdGljayB0byB0aGUgcGxhbiBnaXZlbiB0aGF0IHRoZSBjaXJjdW1zdGFuY2VzIG9mIHRoZSBnYW1lIGhhdmUgbm90IGNoYW5nZWQuIFRoaXMgcHJvYmxlbSBjYW4gYmUgdmlld2VkIGFzIGEgY29udmV4IG9wdGltaXphdGlvbiBwcm9ibGVtIHdoZXJlIHRoZSBnb2FsIGlzIHRvIG1heGltaXplIHRoZSByYXRlIGF0IHdoaWNoIHlvdXIgd2VhbHRoIGdyb3dzLgoKIyBBYm91dCBLZWxseSBHYW1ibGluZwoKS2VsbHkgR2FtYmxpbmcgaGFzIGZvdW5kIGdyZWF0IHN1Y2Nlc3NlcyBpbiBwb3J0Zm9saW8gbWFuYWdlbWVudC4gSW4gcGFydGljdWxhciwgaXQgaXMgcXVpdGUgcG9wdWxhciBpbiBhcHBsaWNhdGlvbnMgdG8gdGhlIHN0b2NrIG1hcmtldCwgYXMgdGhlIHN0b2NrIG1hcmtldCBjYW4gYmUgdmlld2VkIGFzIGEgZ2FtYmxpbmcgZ2FtZSAkXntbMl19JC4KCgojIENvbnZleCBPcHRpbWl6YXRpb24gb2YgS2VsbHkgR2FtYmxpbmcKCkZpcnN0IHdlIGRlbW9uc3RyYXRlIGhvdyB0aGUgS2VsbHkgZ2FtYmxpbmcgcHJvYmxlbSBjYW4gYmUgdmlld2VkIGFzIGEgY29udmV4IG9wdGltaXphdGlvbiBwcm9ibGVtLiAKCkluIHRoZSBjYXNlIGZvciBLZWxseSBnYW1ibGluZywgb3VyIGZ1bmN0aW9uIHdlIGFpbSB0byBtYXhpbWl6ZSBpcyB0aGUgYXZlcmFnZSBncm93dGggcmF0ZSBvZiBvdXIgd2VhbHRoLiAKYGBge3J9CgoKYGBgCgoKCgojIFJlZmVyZW5jZXMKJF57WzFdfSQgOiAKCiRee1syXX0kIDogaHR0cDovL3d3dy5kaXZhLXBvcnRhbC5vcmcvc21hc2gvZ2V0L2RpdmEyOjgxMjY5Ny9GVUxMVEVYVDAxLnBkZiAKCgoKCg==</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiS2VsbHkgQ3JpdGVyaW9uIgphdXRob3I6ICJYaW4gV2FuZyAmIExldmkgQy4gTmlja2xhcyIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKYGBge3IgU2V0dXAsIG1lc3NhZ2UgPSBGQUxTRX0KbGlicmFyeShDVlhSKQpgYGAKCiMgSW50cm9kdWN0aW9uCgpUaGUgS2VsbHkgY3JpdGVyaW9uLCBhbHNvIGtub3duIGFzIEtlbGx5IGdhbWJsaW5nLCBpcyBhIGZvcm11bGEgdGhhdCBhaW1zIHRvIHByb3ZpZGUgdGhlIG9wdGltYWwgc2l6ZSBiZXQgdG8gbWFrZS4gV2hhdCBpcyBwYXJ0aWN1bGFybHkgbmljZSBhYm91dCB0aGlzIG1ldGhvZCwgaXMgdGhhdCBpdCBpcyAqaW50ZXJ0ZW1wb3JhbCosIG1lYW5pbmcgaXQgaXMgaW5kZXBlbmRlbnQgb2YgdGltZS4gVGhpcyBtZWFucyB5b3Ugb25seSBoYXZlIHRvIGNhbGN1bGF0ZSBpdCBvbmNlLCBhbmQgdGhlbiBzdGljayB0byB0aGUgcGxhbiBnaXZlbiB0aGF0IHRoZSBjaXJjdW1zdGFuY2VzIG9mIHRoZSBnYW1lIGhhdmUgbm90IGNoYW5nZWQuIFRoaXMgcHJvYmxlbSBjYW4gYmUgdmlld2VkIGFzIGEgY29udmV4IG9wdGltaXphdGlvbiBwcm9ibGVtIHdoZXJlIHRoZSBnb2FsIGlzIHRvIG1heGltaXplIHRoZSByYXRlIGF0IHdoaWNoIHlvdXIgd2VhbHRoIGdyb3dzLgoKIyBBYm91dCBLZWxseSBHYW1ibGluZwoKS2VsbHkgR2FtYmxpbmcgaGFzIGZvdW5kIGdyZWF0IHN1Y2Nlc3NlcyBpbiBwb3J0Zm9saW8gbWFuYWdlbWVudC4gSW4gcGFydGljdWxhciwgaXQgaXMgcXVpdGUgcG9wdWxhciBpbiBhcHBsaWNhdGlvbnMgdG8gdGhlIHN0b2NrIG1hcmtldCwgYXMgdGhlIHN0b2NrIG1hcmtldCBjYW4gYmUgdmlld2VkIGFzIGEgZ2FtYmxpbmcgZ2FtZSAkXntbMl19JC4gVGhpcyBtZXRob2Qgd2FzIGRldmVsb3BlZCBieSBKLkwuIEtlbGx5IEpyLiBpbiAxOTU2ICAkXntbMV19JC4gKEFERCBNT1JFIEhFUkUuKQoKIyBDb252ZXggT3B0aW1pemF0aW9uIG9mIEtlbGx5IEdhbWJsaW5nCgpGaXJzdCB3ZSBkZW1vbnN0cmF0ZSBob3cgdGhlIEtlbGx5IGdhbWJsaW5nIHByb2JsZW0gY2FuIGJlIHZpZXdlZCBhcyBhIGNvbnZleCBvcHRpbWl6YXRpb24gcHJvYmxlbS4gCgpJbiB0aGUgY2FzZSBmb3IgS2VsbHkgZ2FtYmxpbmcsIG91ciBmdW5jdGlvbiB3ZSBhaW0gdG8gbWF4aW1pemUgaXMgdGhlIGF2ZXJhZ2UgZ3Jvd3RoIHJhdGUgb2Ygb3VyIHdlYWx0aC4gCmBgYHtyIERlZmluZSBWYXJpYWJsZXN9CiMgTnVtYmVyIG9mIG91dGNvbWVzL2F0dGVtcHRzCm4gPC0gIDEwMCAKIyBLbm93biBQcm9iYWJpbGl0aWVzCnBzIDwtIHJlcCgxL24gLCBuKQojIEsgcG9zc2libGUgdmFsdWVzIGZvciBSZXR1cm5zCnJldHMgPC0gcmVwKDEvbiwgbikKYGBgCgpgYGB7ciBEZWZpbmUgT2JqZWN0aXZlIEZ1bmN0aW9ufQpiIDwtIENWWFI6OlZhcmlhYmxlKG4pCm9ial9mdG4gPC0gdChwcykgJSolIGxvZyhyZXRzICUqJSBiKQpjb25zdHIgPC0gbGlzdChiID49IDAsIHN1bShiKSA9PSAxKQoKcHJvYiA8LSBDVlhSOjpQcm9ibGVtKAogIENWWFI6Ok1heGltaXplKG9ial9mdG4pLAogIGNvbnN0cikKCmBgYAoKCgojIFJlZmVyZW5jZXMKJF57WzFdfSQgOiAKCiRee1syXX0kIDogaHR0cDovL3d3dy5kaXZhLXBvcnRhbC5vcmcvc21hc2gvZ2V0L2RpdmEyOjgxMjY5Ny9GVUxMVEVYVDAxLnBkZiAKCgoKCg==</div>
 
 
 
