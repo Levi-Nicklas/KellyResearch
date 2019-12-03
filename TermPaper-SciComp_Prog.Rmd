@@ -1,0 +1,40 @@
+---
+title: "Kelly Criterion"
+author: "Xin Wang & Levi C. Nicklas"
+output: html_notebook
+---
+
+```{r Setup, message = FALSE}
+library(CVXR)
+```
+
+# Introduction
+
+The Kelly criterion, also known as Kelly gambling, is a formula that aims to provide the optimal size bet to make. What is particularly nice about this method, is that it is *intertemporal*, meaning it is independent of time. This means you only have to calculate it once, and then stick to the plan given that the circumstances of the game have not changed. This problem can be viewed as a convex optimization problem where the goal is to maximize the rate at which your wealth grows.
+
+# About Kelly Gambling
+
+Kelly Gambling has found great successes in portfolio management. In particular, it is quite popular in applications to the stock market, as the stock market can be viewed as a gambling game $^{[2]}$.
+
+
+# Convex Optimization of Kelly Gambling
+
+First we demonstrate how the Kelly gambling problem can be viewed as a convex optimization problem. 
+
+In the case for Kelly gambling, our function we aim to maximize is the average growth rate of our wealth. 
+```{r}
+
+
+```
+
+
+
+
+# References
+$^{[1]}$ : 
+
+$^{[2]}$ : http://www.diva-portal.org/smash/get/diva2:812697/FULLTEXT01.pdf 
+
+
+
+
