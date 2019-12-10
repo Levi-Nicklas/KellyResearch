@@ -78,7 +78,8 @@ plt1 <- dat1 %>%
   transition_reveal(along = Var1) +
   ease_aes('linear')
 
-animate(plt1)
+plt2 <- animate(plt1)
+save_animation(animation = plt2, "cool_gif.gif")
 
 simulations[10,] %>% 
   as.data.frame() %>% 
