@@ -98,7 +98,7 @@ for(i in 1:n_sim){
   simulations[,i] <- wealth
 }
 
-
+simulations <-rbind(rep(100,50), simulations)
 
 simulations %>% 
   melt() %>% 
@@ -112,6 +112,17 @@ simulations %>%
        y = "Wealth ($)") +
   theme_minimal()
   
+as.data.frame(P) %>% 
+  pivot_longer(c(V1,V2,V3,V4,V5,V6,V7,V8,V9,V10)) %>% 
+  ggplot(aes(value)) +
+  #geom_histogram(color = "white", fill = "purple") +
+  geom_density(color = "purple", fill = "light blue")+
+  geom_dotplot(fill = "purple")+
+  facet_wrap(~ factor(name, levels = c("V1","V2","V3","V4","V5","V6","V7","V8","V9","V10") )) +
+  scale_x_continuous(limits = c(0,2)) +
+  theme_minimal()+
+  ggtitle("Distributions of Returns for Period")
+
 
 
 ```
