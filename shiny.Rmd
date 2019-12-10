@@ -40,11 +40,11 @@ server <- function(input, output){
       {
         my_sim <- run_sim(n_sim=500, starting_amount =input$num, row_number=50, std=input$std_value)
         show_plot(my_sim, n_sim=input$testID, row_number = input$rounds, starting_amount = input$num)
-
         
       },
       cacheKeyExpr = c({input$testID}, {input$num}, {input$rounds}, {input$std_value})
     )
+  
   output$test <- renderCachedPlot(
     
     {
@@ -56,30 +56,7 @@ server <- function(input, output){
   )
   
   
-    # output$test <- renderImage(
-    #   {
-    #     my_sim <- run_sim(n_sim=500, starting_amount =input$num, row_number=50, std=input$std_value)
-    #     result <- show_plot_new(my_sim, n_sim=input$testID, row_number = input$rounds, starting_amount = input$num)
-    #     outfile <- tempfile(fileext='.gif')
-    #     anim_save("outfile.gif", animate(result))
-    #     list(src = "outfile.gif",contentType = 'image/gif',width = 400,height = 300,alt = "This is alternate text")
-    #     
-    #     
-    #     
-    #     
-    # 
-    #   },
-    #   deleteFile = TRUE,
-    #   cacheKeyExpr = c({input$testID}, {input$num}, {input$rounds}, {input$std_value})
-    # )
-    # 
-  
-  #renderCachedPlot(){
-    
-  #}
-  #assumble input to output
-  #output$testoutid dollar sign used to retrieve the testoutid from the output list  
-  #output$testoutid <- renderPlot(expr = {hist(rnorm(input$testID))})
+
   
 }
 shinyApp(ui=ui, server=server)
