@@ -8,6 +8,7 @@ output: html_notebook
 library(CVXR)
 library(tidyverse)
 library(reshape2)
+library(RColorBrewer)
 ```
 
 # Introduction
@@ -123,8 +124,162 @@ as.data.frame(P) %>%
   theme_minimal()+
   ggtitle("Distributions of Returns for Period")
 
+post_hoc <- as.data.frame(P) %>% 
+  pivot_longer(c(V1,V2,V3,V4,V5,V6,V7,V8,V9,V10))  %>% 
+  mutate(name = factor(name, levels = c("V1","V2","V3","V4","V5","V6","V7","V8","V9","V10")))
+
+levels(post_hoc$name) <- c("1","2","3","4","5","6","7","8","9","10")
+
+post_hoc %>% 
+  ggplot(aes(x = as.numeric(name),
+             y = value)) +
+  geom_point(color = "black") +
+  geom_smooth(method = "lm", color = "purple",, fill = "light blue") +
+  geom_hline(yintercept = 1, color = "red", linetype = 2)+
+  theme_minimal() +
+  scale_y_continuous(limits = c(0,2))+
+  ylab("Return Value") +
+  xlab("Game Interation") +
+  ggtitle("Random game returns as a funtion of iterations")
+  
+
+```
+
+```{r}
+SP6 <- read_csv("S_and_P-6mons.csv")
+SP6 <- read_csv("S_and_P-6Mons-Daily.csv")
+
+SP6 %>% 
+  mutate(change_price = Open/Close) %>% 
+  ggplot(aes(Date, change_price))+
+  geom_point(color = "black") +
+  geom_smooth(method = "lm", color = "purple", fill = "light blue") +
+  geom_hline(yintercept = 1, color = "red", linetype = 2) +
+  ylab("Close to Open Ratio") +
+  xlab("Date") +
+  theme_minimal() +
+  ggtitle("S&P 500 Open:Close Ratio for last 6 Months")
+
+SP6 %>% 
+  ggplot(aes(Date, Close))+
+  geom_line(color = "purple") +
+  ggtitle("S&P 500 Closing Price Over Last 6 Months") +
+  theme_minimal()
+
+SP6_returns <- SP6 %>% 
+  mutate(change_price = Open/Close) %>% 
+  select(Date, change_price)
+
+SP6_returns <- SP6_returns %>% 
+  mutate(ID = row_number()) %>% 
+  select(ID, Date, change_price) 
+
+SP6_returns %>% 
+  ggplot(aes(change_price)) +
+  geom_density(color = "purple", fill = "light blue")+
+  geom_dotplot(fill = "purple")+
+  theme_minimal()+
+  ggtitle("Distributions of Returns from S&P 500") +
+  xlab("Open over Close")
+
+SP6_returns %>% 
+  summarize(std.dev = sd(change_price), 
+            avg = mean(change_price), 
+            med = median(change_price))
 
 
+```
+
+
+```{r}
+# Optimization 
+
+w0 = 100
+# Probabilities
+P <- rnorm(1000, mean = mean(SP6_returns$change_price), sd = sd(SP6_returns$change_price))
+P <- matrix(P, ncol = 10, byrow = TRUE)
+
+P_dim <- dim(P)
+
+ps <- rep(1, P_dim[1]) / P_dim[1]
+
+
+# Proportion of Wealth Bet
+b <- CVXR::Variable(P_dim[2])
+
+# problem
+constr <- list(b >= 0, sum(b) == 1)
+
+prob <- CVXR::Problem(
+  CVXR::Maximize(sum(t(ps) %*% log(P %*% b))),
+  constr)
+
+result <- solve(prob)
+result$value
+result$getValue(b)
+
+
+## Naive betting scheme: bet in proportion to expected return
+bets_n <- as.matrix(rep(0,10))
+bets_n[10] <- 0.20
+avg_ret <- ps %*% P
+#idx <- order(avg_ret[-10], decreasing = TRUE)[1:9]
+tidx <- 1:(10-1)
+fracs <- avg_ret[tidx]/sum(avg_ret[tidx])
+bets_n <- fracs*(1-bets_n[10])
+bets_n <- append(bets_n, 0.20)
+
+
+## Calculate wealth over time
+
+
+#Sim S&P
+
+n_sim <- 50
+simulations <- matrix(rep(0,100*n_sim), nrow = 100)
+simulations2 <- matrix(rep(0,100*n_sim), nrow = 100)
+
+
+for(i in 1:n_sim){
+  bets <- result$getValue(b)
+  idx <- sample.int(100, size = 100, prob =  ps, replace = TRUE)
+  winnings <- P[idx,] %*% bets
+  wealth <- w0 * cumprod(winnings)
+  simulations[,i] <- wealth
+
+  winnings <- P[idx,] %*% bets_n
+  wealth <- w0 * cumprod(winnings)
+  simulations2[,i] <- as.numeric(wealth)
+}
+
+simulations <- rbind(rep(100,n_sim), simulations)
+simulations2 <- rbind(rep(100,n_sim), simulations2)
+```
+
+```{r}
+sim <- simulations %>% 
+  melt()
+sim2 <- simulations2 %>% 
+  melt()
+
+sim$type <- "Kelly"
+sim2$type <- "Naive"
+
+plot_data <- rbind(sim, sim2)
+
+
+
+plot_data %>% 
+  group_by(Var2,type) %>% 
+  ggplot(aes(x = Var1, y = as.numeric(value))) +
+  geom_line(aes(color = type, group = interaction(Var2, type)), alpha = 0.5) +
+  geom_hline(yintercept = 100, color = "black", size = 1.15, linetype = "dashed") +
+  geom_vline(xintercept = 1,  color = "black", size = 1.15, linetype = "dashed")+
+  scale_color_brewer(palette = "Set1")+
+  labs(title = "50 Simulations of 100 Days of S&P: Naive vs. Kelly Bets",
+       x = "Day",
+       y = "Wealth ($)") +
+  theme_minimal()
 ```
 
 
